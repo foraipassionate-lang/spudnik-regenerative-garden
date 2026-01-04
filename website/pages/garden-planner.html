@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CARTOGRAPHY CHAMBER - Garden Planner</title>
+    <meta name="description" content="Design your garden layout with Spudnik's interactive planning tool.">
+
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/animations.css">
+
+    <style>
+        .planner-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--earth-dark) 0%, var(--earth-darkest) 100%);
+            padding: var(--space-lg);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .page-title {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin-bottom: var(--space-sm);
+        }
+
+        .page-subtitle {
+            color: var(--orange-warm);
+            font-family: var(--font-terminal);
+            font-size: 1rem;
+        }
+
+        /* Planner Frame */
+        .planner-frame {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(45, 27, 0, 0.9);
+            border: 4px solid var(--earth-light);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-deep), 0 0 60px rgba(255, 107, 0, 0.2);
+        }
+
+        /* Vine decoration */
+        .vine-border {
+            position: relative;
+            padding: var(--space-md);
+            background:
+                linear-gradient(to right, var(--forest-mid) 2px, transparent 2px),
+                linear-gradient(to bottom, var(--forest-mid) 2px, transparent 2px);
+            background-size: 20px 20px;
+            background-position: center;
+        }
+
+        .vine-border::before,
+        .vine-border::after {
+            content: '🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿🌱🌿';
+            position: absolute;
+            font-size: 1.2rem;
+            opacity: 0.6;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .vine-border::before {
+            top: 5px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .vine-border::after {
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        /* Iframe container */
+        .planner-container {
+            background: white;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .planner-iframe {
+            width: 100%;
+            height: 85vh;
+            border: none;
+            display: block;
+        }
+
+        /* Loading state */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--earth-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-potato {
+            font-size: 4rem;
+            animation: float 2s ease-in-out infinite;
+            margin-bottom: var(--space-md);
+        }
+
+        .loading-text {
+            font-family: var(--font-terminal);
+            color: var(--gold-bright);
+            font-size: 1.2rem;
+            animation: text-glow 2s ease-in-out infinite;
+        }
+
+        /* Quick tips */
+        .quick-tips {
+            background: rgba(0, 0, 0, 0.4);
+            padding: var(--space-md);
+            margin-top: var(--space-md);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--earth-mid);
+        }
+
+        .tips-title {
+            color: var(--gold-bright);
+            font-family: var(--font-terminal);
+            margin-bottom: var(--space-sm);
+        }
+
+        .tips-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-sm);
+            font-size: 0.9rem;
+            color: var(--cream);
+            opacity: 0.8;
+        }
+
+        .tips-list li {
+            list-style: none;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .tips-list li::before {
+            content: '🌱';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Navigation */
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--gold-dim);
+            text-decoration: none;
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--earth-mid);
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gold-bright);
+            border-color: var(--gold-bright);
+            background: rgba(255, 215, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <main class="planner-page">
+        <header class="page-header">
+            <h1 class="page-title">&#x1F5FA; CARTOGRAPHY CHAMBER &#x1F5FA;</h1>
+            <p class="page-subtitle">/// Spudnik's Universal Garden Layout Designer ///</p>
+        </header>
+
+        <div class="planner-frame">
+            <div class="vine-border">
+                <div class="planner-container" style="position: relative;">
+                    <div class="loading-overlay" id="loading">
+                        <div class="loading-potato">&#x1F954;</div>
+                        <div class="loading-text">Loading the Cartography Chamber...</div>
+                    </div>
+                    <iframe
+                        src="../../tools/garden-planner/index.html"
+                        class="planner-iframe"
+                        id="planner-iframe"
+                        title="Garden Planner Tool"
+                        onload="document.getElementById('loading').classList.add('hidden')"
+                    ></iframe>
+                </div>
+
+                <div class="quick-tips">
+                    <h3 class="tips-title">&#x1F954; SPUDNIK'S QUICK TIPS:</h3>
+                    <ul class="tips-list">
+                        <li>Click zones to select, drag to move</li>
+                        <li>Blue button rotates, red X deletes</li>
+                        <li>Grid squares = 0.5m each</li>
+                        <li>Save layouts as JSON for later</li>
+                        <li>Export as PNG to share</li>
+                        <li>Create custom zones for anything!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav-links">
+            <a href="../index.html" class="nav-link">
+                &#x1F3E0; Return to Portal
+            </a>
+            <a href="calculator.html" class="nav-link">
+                &#x2697; Amendment Calculator
+            </a>
+            <a href="archive.html" class="nav-link">
+                &#x1F333; Guides & Knowledge
+            </a>
+        </nav>
+    </main>
+</body>
+</html>

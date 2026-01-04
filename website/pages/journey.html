@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE FOREST PATH - Your Learning Journey</title>
+    <meta name="description" content="Track your progress through regenerative agriculture wisdom.">
+
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/animations.css">
+
+    <style>
+        .journey-page {
+            min-height: 100vh;
+            background: linear-gradient(to bottom, var(--forest-deep), var(--forest-dark), var(--forest-deep));
+            padding: var(--space-xl) var(--space-lg);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: var(--space-md);
+            animation: grow-in 1s ease-out;
+        }
+
+        .page-subtitle {
+            color: var(--forest-glow);
+            font-family: var(--font-terminal);
+            font-size: 1.2rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            max-width: 800px;
+            margin: 0 auto var(--space-2xl);
+            text-align: center;
+        }
+
+        .progress-label {
+            font-family: var(--font-terminal);
+            font-size: 1.3rem;
+            color: var(--gold-bright);
+            margin-bottom: var(--space-md);
+        }
+
+        .progress-bar {
+            height: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--forest-mid);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--forest-mid), var(--forest-glow), var(--terminal-green));
+            border-radius: var(--radius-full);
+            transition: width 0.5s var(--ease-out-expo);
+            box-shadow: 0 0 20px var(--forest-glow);
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-terminal);
+            font-size: 1rem;
+            color: var(--cream);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Journey Container */
+        .journey-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Chapter */
+        .chapter {
+            margin-bottom: var(--space-2xl);
+            position: relative;
+        }
+
+        .chapter::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 60px;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--forest-glow), var(--forest-mid), transparent);
+        }
+
+        .chapter:last-child::before {
+            display: none;
+        }
+
+        .chapter-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .chapter-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--forest-mid);
+            border: 3px solid var(--forest-glow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 15px var(--forest-glow);
+            z-index: 1;
+        }
+
+        .chapter-title {
+            font-size: 1.6rem;
+            color: var(--forest-glow);
+        }
+
+        .chapter-description {
+            color: var(--cream);
+            opacity: 0.7;
+            margin-left: 60px;
+            margin-bottom: var(--space-lg);
+            font-size: 0.95rem;
+        }
+
+        /* Milestones */
+        .milestones {
+            margin-left: 60px;
+        }
+
+        .milestone {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: rgba(0, 50, 0, 0.3);
+            border: 1px solid var(--forest-mid);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-sm);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .milestone:hover {
+            background: rgba(0, 80, 0, 0.4);
+            border-color: var(--forest-light);
+        }
+
+        .milestone.completed {
+            background: rgba(127, 255, 127, 0.1);
+            border-color: var(--forest-glow);
+        }
+
+        .milestone-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--forest-mid);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .milestone.completed .milestone-checkbox {
+            background: var(--forest-glow);
+            border-color: var(--forest-glow);
+        }
+
+        .milestone-checkbox::after {
+            content: '';
+            display: none;
+        }
+
+        .milestone.completed .milestone-checkbox::after {
+            content: '✓';
+            display: block;
+            color: var(--forest-deep);
+            font-weight: bold;
+        }
+
+        .milestone-content {
+            flex: 1;
+        }
+
+        .milestone-title {
+            color: var(--cream);
+            font-size: 1rem;
+            margin-bottom: var(--space-xs);
+        }
+
+        .milestone.completed .milestone-title {
+            color: var(--forest-glow);
+        }
+
+        .milestone-type {
+            font-size: 0.8rem;
+            color: var(--forest-light);
+            opacity: 0.7;
+        }
+
+        /* Celebration */
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+        }
+
+        .celebration.active {
+            display: block;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-xl);
+            color: var(--forest-glow);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold-bright);
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: var(--space-2xl);
+            color: var(--forest-light);
+            font-family: var(--font-terminal);
+        }
+    </style>
+</head>
+<body>
+    <main class="journey-page">
+        <header class="page-header">
+            <h1 class="page-title">&#x1F6A9; THE FOREST PATH &#x1F6A9;</h1>
+            <p class="page-subtitle">/// Track Your Regenerative Journey ///</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-label">Forest Illuminated: <span id="progress-percent">0</span>%</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+                <div class="progress-text" id="progress-text">0 / 15 milestones</div>
+            </div>
+        </div>
+
+        <div class="journey-container">
+            <!-- Chapter 1: The Awakening -->
+            <section class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-icon">&#x1F331;</div>
+                    <h2 class="chapter-title">The Awakening</h2>
+                </div>
+                <p class="chapter-description">Understanding the foundations of regenerative agriculture</p>
+
+                <div class="milestones">
+                    <div class="milestone" data-id="read-manifesto">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Read the Potato Propaganda Protocol</div>
+                            <div class="milestone-type">&#x1F4D6; Reading</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="understand-principles">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Understand the 5 Core Principles</div>
+                            <div class="milestone-type">&#x1F4A1; Concept</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="visit-terminal">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Consult the Spudnik Terminal</div>
+                            <div class="milestone-type">&#x1F954; Interaction</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="assess-site">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Assess your growing site</div>
+                            <div class="milestone-type">&#x1F3E1; Action</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="soil-test">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Conduct a soil test</div>
+                            <div class="milestone-type">&#x1F52C; Analysis</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 2: The Cultivation -->
+            <section class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-icon">&#x1F33F;</div>
+                    <h2 class="chapter-title">The Cultivation</h2>
+                </div>
+                <p class="chapter-description">Making your first amendments and building soil biology</p>
+
+                <div class="milestones">
+                    <div class="milestone" data-id="make-lab">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Make your first batch of LAB</div>
+                            <div class="milestone-type">&#x1F9EA; Fermentation</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="collect-imo">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Collect Indigenous Microorganisms</div>
+                            <div class="milestone-type">&#x1F344; Forest Magic</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="start-compost">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Start a compost system</div>
+                            <div class="milestone-type">&#x267B; Decomposition</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="make-fpj">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Make Fermented Plant Juice</div>
+                            <div class="milestone-type">&#x1F33F; Fermentation</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="first-application">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Apply your first amendment</div>
+                            <div class="milestone-type">&#x1F4A7; Application</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chapter 3: The Mastery -->
+            <section class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-icon">&#x1F333;</div>
+                    <h2 class="chapter-title">The Mastery</h2>
+                </div>
+                <p class="chapter-description">Advanced techniques and system design</p>
+
+                <div class="milestones">
+                    <div class="milestone" data-id="design-guild">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Design a plant guild</div>
+                            <div class="milestone-type">&#x1F3D8; Design</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="close-loop">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Create a closed-loop waste system</div>
+                            <div class="milestone-type">&#x267B; Systems</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="make-aact">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Brew Actively Aerated Compost Tea</div>
+                            <div class="milestone-type">&#x1F9EB; Advanced</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="observe-som">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Observe soil organic matter increase</div>
+                            <div class="milestone-type">&#x1F4C8; Results</div>
+                        </div>
+                    </div>
+                    <div class="milestone" data-id="share-knowledge">
+                        <div class="milestone-checkbox"></div>
+                        <div class="milestone-content">
+                            <div class="milestone-title">Share your knowledge with others</div>
+                            <div class="milestone-type">&#x1F49A; Community</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="../index.html" class="back-link">
+                &#x1F3E0; Return to The Portal
+            </a>
+        </div>
+
+        <p class="footer-text">
+            "The journey of a thousand miles begins with a single potato." &#x1F954;
+        </p>
+
+        <!-- Celebration overlay -->
+        <div class="celebration" id="celebration"></div>
+    </main>
+
+    <script>
+        // Progress Tracker with localStorage
+        class JourneyTracker {
+            constructor() {
+                this.storageKey = 'spudnik-journey-progress';
+                this.milestones = document.querySelectorAll('.milestone');
+                this.progressFill = document.getElementById('progress-fill');
+                this.progressPercent = document.getElementById('progress-percent');
+                this.progressText = document.getElementById('progress-text');
+
+                this.init();
+            }
+
+            init() {
+                // Load saved progress
+                this.loadProgress();
+
+                // Add click handlers
+                this.milestones.forEach(milestone => {
+                    milestone.addEventListener('click', () => this.toggleMilestone(milestone));
+                });
+
+                // Update progress display
+                this.updateProgress();
+            }
+
+            loadProgress() {
+                const saved = localStorage.getItem(this.storageKey);
+                const progress = saved ? JSON.parse(saved) : {};
+
+                this.milestones.forEach(milestone => {
+                    const id = milestone.dataset.id;
+                    if (progress[id] && progress[id].completed) {
+                        milestone.classList.add('completed');
+                    }
+                });
+            }
+
+            saveProgress() {
+                const progress = {};
+                this.milestones.forEach(milestone => {
+                    const id = milestone.dataset.id;
+                    progress[id] = {
+                        completed: milestone.classList.contains('completed'),
+                        date: milestone.classList.contains('completed') ? new Date().toISOString() : null
+                    };
+                });
+                localStorage.setItem(this.storageKey, JSON.stringify(progress));
+            }
+
+            toggleMilestone(milestone) {
+                const wasCompleted = milestone.classList.contains('completed');
+                milestone.classList.toggle('completed');
+
+                this.saveProgress();
+                this.updateProgress();
+
+                // Celebrate if newly completed
+                if (!wasCompleted && milestone.classList.contains('completed')) {
+                    this.celebrate();
+                }
+            }
+
+            updateProgress() {
+                const total = this.milestones.length;
+                const completed = document.querySelectorAll('.milestone.completed').length;
+                const percent = Math.round((completed / total) * 100);
+
+                this.progressFill.style.width = percent + '%';
+                this.progressPercent.textContent = percent;
+                this.progressText.textContent = `${completed} / ${total} milestones`;
+            }
+
+            celebrate() {
+                const celebration = document.getElementById('celebration');
+                celebration.classList.add('active');
+
+                // Create falling leaves
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const leaf = document.createElement('div');
+                        leaf.innerHTML = ['🌿', '🍂', '🍃', '✨', '🥔'][Math.floor(Math.random() * 5)];
+                        leaf.style.cssText = `
+                            position: fixed;
+                            top: -50px;
+                            left: ${Math.random() * 100}vw;
+                            font-size: ${1 + Math.random() * 2}rem;
+                            animation: leaf-fall ${3 + Math.random() * 2}s linear forwards;
+                            z-index: 1001;
+                        `;
+                        celebration.appendChild(leaf);
+
+                        setTimeout(() => leaf.remove(), 5000);
+                    }, i * 50);
+                }
+
+                setTimeout(() => {
+                    celebration.classList.remove('active');
+                }, 3000);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            window.journeyTracker = new JourneyTracker();
+        });
+    </script>
+</body>
+</html>

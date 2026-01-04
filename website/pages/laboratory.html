@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE MYCELIUM LAB - Amendments & Innovations</title>
+    <meta name="description" content="Explore KNF amendments and innovative waste-to-resource techniques.">
+
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/animations.css">
+
+    <style>
+        .laboratory-page {
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--earth-darkest) 0%, var(--forest-deep) 50%, var(--earth-dark) 100%);
+            padding: var(--space-xl) var(--space-lg);
+            position: relative;
+        }
+
+        /* Underground texture */
+        .laboratory-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to bottom,
+                transparent 0%,
+                rgba(139, 69, 19, 0.1) 50%,
+                transparent 100%
+            );
+            pointer-events: none;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: var(--space-md);
+            animation: grow-in 1s ease-out;
+            color: var(--forest-glow);
+            text-shadow: 0 0 20px var(--forest-glow);
+        }
+
+        .page-subtitle {
+            color: var(--terminal-dim);
+            font-family: var(--font-terminal);
+            font-size: 1.2rem;
+        }
+
+        /* Lab Container */
+        .lab-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+            padding-bottom: var(--space-sm);
+            border-bottom: 2px solid var(--forest-mid);
+        }
+
+        .section-icon {
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--forest-glow);
+        }
+
+        /* Amendment Jars Grid */
+        .jar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .amendment-jar {
+            background: linear-gradient(to bottom, rgba(0, 50, 0, 0.6), rgba(0, 30, 0, 0.8));
+            border: 2px solid var(--forest-mid);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s var(--ease-out-expo);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .amendment-jar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, var(--jar-color, rgba(127, 255, 127, 0.2)) 0%, transparent 70%);
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+
+        .amendment-jar:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--forest-glow);
+            box-shadow: 0 20px 40px rgba(127, 255, 127, 0.2), 0 0 30px var(--jar-color, rgba(127, 255, 127, 0.3));
+        }
+
+        .amendment-jar:hover::before {
+            opacity: 0.6;
+        }
+
+        .jar-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-sm);
+            display: block;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        .jar-name {
+            font-family: var(--font-terminal);
+            font-size: 1.3rem;
+            color: var(--forest-glow);
+            text-shadow: 0 0 10px var(--forest-glow);
+            margin-bottom: var(--space-xs);
+        }
+
+        .jar-full-name {
+            font-size: 0.85rem;
+            color: var(--cream);
+            opacity: 0.7;
+        }
+
+        /* Innovation Cards */
+        .innovation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .innovation-card {
+            background: linear-gradient(145deg, rgba(0, 80, 0, 0.4), rgba(0, 40, 0, 0.6));
+            border: 2px solid var(--forest-light);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            transition: all 0.3s ease;
+        }
+
+        .innovation-card:hover {
+            border-color: var(--terminal-green);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
+        }
+
+        .innovation-badge {
+            display: inline-block;
+            padding: var(--space-xs) var(--space-sm);
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid var(--terminal-green);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            color: var(--terminal-green);
+            margin-bottom: var(--space-md);
+        }
+
+        .innovation-title {
+            font-size: 1.4rem;
+            color: var(--terminal-green);
+            margin-bottom: var(--space-md);
+        }
+
+        .innovation-problem {
+            color: var(--cream);
+            opacity: 0.8;
+            margin-bottom: var(--space-md);
+            font-size: 0.95rem;
+        }
+
+        .innovation-solution {
+            color: var(--forest-glow);
+            font-family: var(--font-terminal);
+            padding: var(--space-md);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--space-md);
+        }
+
+        .innovation-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--terminal-green);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .innovation-link:hover {
+            color: var(--forest-glow);
+        }
+
+        /* Waste Flow Diagram */
+        .waste-flow {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--forest-mid);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+        }
+
+        .flow-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--terminal-green);
+            margin-bottom: var(--space-lg);
+        }
+
+        .flow-chain {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: var(--space-md);
+            font-family: var(--font-terminal);
+            font-size: 1.1rem;
+        }
+
+        .flow-item {
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--terminal-dim);
+            border-radius: var(--radius-sm);
+            color: var(--terminal-green);
+        }
+
+        .flow-arrow {
+            color: var(--terminal-dim);
+            font-size: 1.5rem;
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-xl);
+            color: var(--forest-glow);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--terminal-green);
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: var(--space-2xl);
+            color: var(--forest-light);
+            font-family: var(--font-terminal);
+        }
+
+        @media (max-width: 768px) {
+            .innovation-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-chain {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="laboratory-page">
+        <header class="page-header">
+            <h1 class="page-title">&#x1F9EA; THE MYCELIUM LAB &#x1F9EA;</h1>
+            <p class="page-subtitle">/// Amendments, Ferments & Innovations ///</p>
+        </header>
+
+        <div class="lab-container">
+            <!-- Sacred 15 Amendments -->
+            <section>
+                <div class="section-header">
+                    <span class="section-icon">&#x1F52C;</span>
+                    <h2 class="section-title">The Sacred Amendments</h2>
+                </div>
+
+                <div class="jar-grid">
+                    <div class="amendment-jar" style="--jar-color: rgba(200, 255, 200, 0.4);">
+                        <span class="jar-icon">&#x1F9AB;</span>
+                        <div class="jar-name">LAB</div>
+                        <div class="jar-full-name">Lactic Acid Bacteria</div>
+                    </div>
+                    <div class="amendment-jar" style="--jar-color: rgba(127, 255, 0, 0.4);">
+                        <span class="jar-icon">&#x1F33F;</span>
+                        <div class="jar-name">FPJ</div>
+                        <div class="jar-full-name">Fermented Plant Juice</div>
+                    </div>
+                    <div class="amendment-jar" style="--jar-color: rgba(255, 200, 100, 0.4);">
+                        <span class="jar-icon">&#x1F34E;</span>
+                        <div class="jar-name">FFJ</div>
+                        <div class="jar-full-name">Fermented Fruit Juice</div>
+                    </div>
+                    <div class="amendment-jar" style="--jar-color: rgba(139, 90, 43, 0.4);">
+                        <span class="jar-icon">&#x1F344;</span>
+                        <div class="jar-name">IMO</div>
+                        <div class="jar-full-name">Indigenous Microorganisms</div>
+                    </div>
+                    <div class="amendment-jar" style="--jar-color: rgba(100, 150, 255, 0.4);">
+                        <span class="jar-icon">&#x1F41F;</span>
+                        <div class="jar-name">FAA</div>
+                        <div class="jar-full-name">Fish Amino Acid</div>
+                    </div>
+                    <div class="amendment-jar" style="--jar-color: rgba(255, 255, 200, 0.4);">
+                        <span class="jar-icon">&#x1F95A;</span>
+                        <div class="jar-name">WCA</div>
+                        <div class="jar-full-name">Water-soluble Calcium</div>
+                    </div>
+                    <div class="amendment-jar" style="--jar-color: rgba(200, 180, 160, 0.4);">
+                        <span class="jar-icon">&#x1F9B4;</span>
+                        <div class="jar-name">WCP</div>
+                        <div class="jar-full-name">Calcium Phosphate</div>
+                    </div>
+                    <div class="amendment-jar" style="--jar-color: rgba(0, 200, 100, 0.4);">
+                        <span class="jar-icon">&#x1F33B;</span>
+                        <div class="jar-name">OHN</div>
+                        <div class="jar-full-name">Oriental Herbal Nutrient</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Innovations -->
+            <section>
+                <div class="section-header">
+                    <span class="section-icon">&#x1F4A1;</span>
+                    <h2 class="section-title">Spudnik Innovations</h2>
+                </div>
+
+                <div class="innovation-grid">
+                    <article class="innovation-card">
+                        <span class="innovation-badge">WASTE = RESOURCE</span>
+                        <h3 class="innovation-title">Malted Grain LAB</h3>
+                        <p class="innovation-problem">
+                            <strong>Problem:</strong> Traditional LAB from rice wash takes 2-3 weeks.
+                            Buying brown rice just for the wash feels wasteful.
+                        </p>
+                        <div class="innovation-solution">
+                            <strong>Solution:</strong> Expired brewery grains (free from local breweries!)
+                            have pre-converted sugars. LAB production in 6-10 days.
+                        </div>
+                        <a href="../../innovations/malted-grain-lab.md" class="innovation-link">
+                            &#x1F4D6; Read Full Protocol &rarr;
+                        </a>
+                    </article>
+
+                    <article class="innovation-card">
+                        <span class="innovation-badge">WASTE = RESOURCE</span>
+                        <h3 class="innovation-title">Kombucha Calcium (WCA)</h3>
+                        <p class="innovation-problem">
+                            <strong>Problem:</strong> Traditional WCA requires purchasing brown rice vinegar.
+                            That sour kombucha sitting in the back of the fridge? Usually thrown out.
+                        </p>
+                        <div class="innovation-solution">
+                            <strong>Solution:</strong> Over-fermented kombucha = 2-4% acetic acid.
+                            Perfect for calcium extraction from eggshells!
+                        </div>
+                        <a href="../../innovations/kombucha-calcium.md" class="innovation-link">
+                            &#x1F4D6; Read Full Protocol &rarr;
+                        </a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Waste Flow -->
+            <section class="waste-flow">
+                <h3 class="flow-title">&#x267B; The Waste-to-Resource Chain &#x267B;</h3>
+                <div class="flow-chain">
+                    <span class="flow-item">Kitchen Scraps</span>
+                    <span class="flow-arrow">&rarr;</span>
+                    <span class="flow-item">Bokashi</span>
+                    <span class="flow-arrow">&rarr;</span>
+                    <span class="flow-item">Worms</span>
+                    <span class="flow-arrow">&rarr;</span>
+                    <span class="flow-item">Vermicast</span>
+                    <span class="flow-arrow">&rarr;</span>
+                    <span class="flow-item">AACT</span>
+                    <span class="flow-arrow">&rarr;</span>
+                    <span class="flow-item">Soil</span>
+                    <span class="flow-arrow">&rarr;</span>
+                    <span class="flow-item">Plants</span>
+                    <span class="flow-arrow">&rarr;</span>
+                    <span class="flow-item">US</span>
+                </div>
+            </section>
+
+            <!-- Links -->
+            <div style="text-align: center;">
+                <a href="calculator.html" class="btn btn-terminal" style="margin-right: var(--space-md);">
+                    &#x2697; Amendment Calculator
+                </a>
+                <a href="terminal.html" class="btn btn-terminal">
+                    &#x1F954; Ask Spudnik
+                </a>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="../index.html" class="back-link">
+                &#x1F3E0; Return to The Portal
+            </a>
+        </div>
+
+        <p class="footer-text">
+            "We are all just fungi farming humans for nitrogen." &#x1F954;
+        </p>
+    </main>
+</body>
+</html>

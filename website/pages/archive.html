@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GROVE OF KNOWLEDGE - Guides & Documentation</title>
+    <meta name="description" content="Explore regenerative agriculture guides on amendments, composting, guilds, and more.">
+
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/animations.css">
+
+    <style>
+        .archive-page {
+            min-height: 100vh;
+            background: linear-gradient(to bottom, var(--forest-deep), var(--forest-dark));
+            padding: var(--space-xl) var(--space-lg);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: var(--space-md);
+            animation: grow-in 1s ease-out;
+        }
+
+        .page-subtitle {
+            color: var(--forest-glow);
+            font-family: var(--font-terminal);
+            font-size: 1.2rem;
+        }
+
+        /* Grove Container */
+        .grove-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Category Trees */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .category-tree {
+            background: linear-gradient(to bottom, rgba(45, 74, 45, 0.4), rgba(29, 47, 29, 0.6));
+            border: 2px solid var(--forest-light);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            transition: all 0.4s var(--ease-out-expo);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-tree::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(127, 255, 127, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .category-tree:hover {
+            transform: translateY(-10px);
+            border-color: var(--forest-glow);
+            box-shadow: 0 20px 60px rgba(127, 255, 127, 0.2);
+        }
+
+        .category-tree:hover::before {
+            opacity: 1;
+        }
+
+        .tree-icon {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: var(--space-md);
+            display: block;
+            animation: sway 4s ease-in-out infinite;
+        }
+
+        .tree-title {
+            font-size: 1.5rem;
+            color: var(--forest-glow);
+            text-align: center;
+            margin-bottom: var(--space-sm);
+            text-shadow: 0 0 10px var(--forest-glow);
+        }
+
+        .tree-description {
+            text-align: center;
+            color: var(--cream);
+            opacity: 0.8;
+            margin-bottom: var(--space-lg);
+            font-size: 0.95rem;
+        }
+
+        /* Guide Links */
+        .guide-list {
+            list-style: none;
+        }
+
+        .guide-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            margin-bottom: var(--space-xs);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: var(--radius-sm);
+            color: var(--cream);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .guide-link:hover {
+            background: rgba(127, 255, 127, 0.2);
+            color: var(--forest-glow);
+            padding-left: var(--space-lg);
+        }
+
+        .guide-link::before {
+            content: '🌿';
+            font-size: 0.8rem;
+        }
+
+        .guide-link.pdf::before { content: '📜'; }
+        .guide-link.md::before { content: '📝'; }
+        .guide-link.xlsx::before { content: '📊'; }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-xl);
+            color: var(--forest-glow);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold-bright);
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: var(--space-2xl);
+            color: var(--forest-light);
+            font-family: var(--font-terminal);
+        }
+    </style>
+</head>
+<body>
+    <main class="archive-page">
+        <header class="page-header">
+            <h1 class="page-title">&#x1F333; GROVE OF KNOWLEDGE &#x1F333;</h1>
+            <p class="page-subtitle">/// Guides, Techniques & Sacred Wisdom ///</p>
+        </header>
+
+        <div class="grove-container">
+            <div class="category-grid">
+                <!-- Getting Started -->
+                <article class="category-tree">
+                    <span class="tree-icon">&#x1F331;</span>
+                    <h2 class="tree-title">Getting Started</h2>
+                    <p class="tree-description">Begin your regenerative journey with foundational knowledge.</p>
+                    <ul class="guide-list">
+                        <li><a href="../../guides/getting-started/complete-garden-system.md" class="guide-link md">Complete Garden System</a></li>
+                        <li><a href="../../guides/getting-started/spudnik-hq-layout.md" class="guide-link md">Spudnik HQ Layout</a></li>
+                        <li><a href="../../guides/getting-started/site-assessment.pdf" class="guide-link pdf">Site Assessment Guide</a></li>
+                    </ul>
+                </article>
+
+                <!-- Amendments -->
+                <article class="category-tree">
+                    <span class="tree-icon">&#x1F9EA;</span>
+                    <h2 class="tree-title">Amendments</h2>
+                    <p class="tree-description">KNF & JADAM fermentation recipes and techniques.</p>
+                    <ul class="guide-list">
+                        <li><a href="../../guides/amendments/complete-guide.pdf" class="guide-link pdf">Complete Amendment Guide</a></li>
+                        <li><a href="../../guides/amendments/complete-guide-v2.pdf" class="guide-link pdf">Amendment Guide v2</a></li>
+                        <li><a href="calculator.html" class="guide-link">Amendment Calculator</a></li>
+                    </ul>
+                </article>
+
+                <!-- Composting -->
+                <article class="category-tree">
+                    <span class="tree-icon">&#x267B;</span>
+                    <h2 class="tree-title">Composting</h2>
+                    <p class="tree-description">Transform waste into black gold through sacred decomposition.</p>
+                    <ul class="guide-list">
+                        <li><a href="../../guides/composting/jean-pain-method.md" class="guide-link md">Jean Pain Method</a></li>
+                        <li><a href="../../guides/composting/winter-compendium.pdf" class="guide-link pdf">Winter Composting Compendium</a></li>
+                    </ul>
+                </article>
+
+                <!-- Guilds -->
+                <article class="category-tree">
+                    <span class="tree-icon">&#x1F3D8;</span>
+                    <h2 class="tree-title">Guilds & Polycultures</h2>
+                    <p class="tree-description">Plant communities that support each other.</p>
+                    <ul class="guide-list">
+                        <li><a href="../../guides/guilds/ultimate-compendium.pdf" class="guide-link pdf">Ultimate Guild Compendium</a></li>
+                        <li><a href="../../guides/guilds/sacred-guild-compendium.docx" class="guide-link">Sacred Guild Guide</a></li>
+                    </ul>
+                </article>
+
+                <!-- Innovations -->
+                <article class="category-tree">
+                    <span class="tree-icon">&#x1F4A1;</span>
+                    <h2 class="tree-title">Innovations</h2>
+                    <p class="tree-description">Novel techniques developed at Spudnik HQ.</p>
+                    <ul class="guide-list">
+                        <li><a href="../../innovations/malted-grain-lab.md" class="guide-link md">Malted Grain LAB</a></li>
+                        <li><a href="../../innovations/kombucha-calcium.md" class="guide-link md">Kombucha Calcium (WCA)</a></li>
+                    </ul>
+                </article>
+
+                <!-- Templates -->
+                <article class="category-tree">
+                    <span class="tree-icon">&#x1F4CB;</span>
+                    <h2 class="tree-title">Templates & Tools</h2>
+                    <p class="tree-description">Printable planners and tracking sheets.</p>
+                    <ul class="guide-list">
+                        <li><a href="../../templates/garden-planner.xlsx" class="guide-link xlsx">Garden Planner</a></li>
+                        <li><a href="../../templates/batch-tracking.md" class="guide-link md">Batch Tracking Sheet</a></li>
+                        <li><a href="../../templates/amendment-cheat-code.xlsx" class="guide-link xlsx">Amendment Cheat Code</a></li>
+                        <li><a href="../../templates/garden-guilds.xlsx" class="guide-link xlsx">Garden Guilds</a></li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="../index.html" class="back-link">
+                &#x1F3E0; Return to The Portal
+            </a>
+        </div>
+
+        <p class="footer-text">
+            "Knowledge, like compost, improves with diversity and time." &#x1F954;
+        </p>
+    </main>
+</body>
+</html>

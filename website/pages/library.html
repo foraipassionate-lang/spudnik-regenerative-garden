@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ANCIENT ARCHIVE - Reference Library</title>
+    <meta name="description" content="Curated collection of permaculture, agroforestry, and natural farming wisdom.">
+
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/animations.css">
+
+    <style>
+        .library-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--earth-darkest), var(--earth-dark));
+            padding: var(--space-xl) var(--space-lg);
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: var(--space-md);
+            animation: grow-in 1s ease-out;
+        }
+
+        .page-subtitle {
+            color: var(--orange-warm);
+            font-family: var(--font-terminal);
+            font-size: 1.2rem;
+        }
+
+        /* Library Container */
+        .library-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Bookshelf Sections */
+        .bookshelf {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .shelf-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-sm);
+            border-bottom: 2px solid var(--earth-mid);
+        }
+
+        .shelf-icon {
+            font-size: 2rem;
+        }
+
+        .shelf-title {
+            font-size: 1.5rem;
+            color: var(--gold-bright);
+        }
+
+        /* Book Grid */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .book-card {
+            background: linear-gradient(145deg, rgba(139, 69, 19, 0.4), rgba(101, 67, 33, 0.6));
+            border: 2px solid var(--earth-light);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            transition: all 0.3s var(--ease-out-expo);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold-bright);
+            box-shadow: 0 15px 40px rgba(255, 107, 0, 0.2);
+        }
+
+        .book-title {
+            font-size: 1rem;
+            color: var(--cream);
+            margin-bottom: var(--space-sm);
+            line-height: 1.4;
+        }
+
+        .book-meta {
+            font-size: 0.85rem;
+            color: var(--gold-dim);
+            margin-bottom: var(--space-md);
+        }
+
+        .book-download {
+            margin-top: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid var(--gold-dim);
+            border-radius: var(--radius-sm);
+            color: var(--gold-bright);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .book-download:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--gold-bright);
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-top: var(--space-xl);
+            color: var(--gold-dim);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--gold-bright);
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: var(--space-2xl);
+            color: var(--earth-accent);
+            font-family: var(--font-terminal);
+        }
+    </style>
+</head>
+<body>
+    <main class="library-page">
+        <header class="page-header">
+            <h1 class="page-title">&#x1F4DC; THE ANCIENT ARCHIVE &#x1F4DC;</h1>
+            <p class="page-subtitle">/// Curated Wisdom from the Ages ///</p>
+        </header>
+
+        <div class="library-container">
+            <!-- Permaculture Foundations -->
+            <section class="bookshelf">
+                <div class="shelf-header">
+                    <span class="shelf-icon">&#x1F33F;</span>
+                    <h2 class="shelf-title">Permaculture Foundations</h2>
+                </div>
+                <div class="book-grid">
+                    <article class="book-card">
+                        <h3 class="book-title">The Essence of Permaculture</h3>
+                        <p class="book-meta">David Holmgren</p>
+                        <a href="../../reference-library/permaculture-foundations/Essence_of_Pc_EN.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Permaculture Beginner's Guide</h3>
+                        <p class="book-meta">Introduction to Design</p>
+                        <a href="../../reference-library/permaculture-foundations/Permaculture_Beginners_Guide.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">The Basics of Permaculture Design</h3>
+                        <p class="book-meta">Core Principles</p>
+                        <a href="../../reference-library/permaculture-foundations/The_Basics_of_Permaculture_Design.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Future Scenarios</h3>
+                        <p class="book-meta">David Holmgren</p>
+                        <a href="../../reference-library/permaculture-foundations/future_scenarios.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Natural Farming -->
+            <section class="bookshelf">
+                <div class="shelf-header">
+                    <span class="shelf-icon">&#x1F33E;</span>
+                    <h2 class="shelf-title">Natural Farming</h2>
+                </div>
+                <div class="book-grid">
+                    <article class="book-card">
+                        <h3 class="book-title">The One Straw Revolution</h3>
+                        <p class="book-meta">Masanobu Fukuoka</p>
+                        <a href="../../reference-library/natural-farming/The_One_Straw_Revolution.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Another Kind of Garden: The Methods of Jean Pain</h3>
+                        <p class="book-meta">Brushwood Composting</p>
+                        <a href="../../reference-library/natural-farming/Another_Kind_of_GardenThe_Methods_of_Jean_Pain.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Growing Gourmet and Medicinal Mushrooms</h3>
+                        <p class="book-meta">Paul Stamets (Photos)</p>
+                        <a href="../../reference-library/natural-farming/Growing_Gourmet_and_Medicinal_Mushroomsphotos.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Organic Gardening</h3>
+                        <p class="book-meta">Fundamentals</p>
+                        <a href="../../reference-library/natural-farming/organic_gardening.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Food Forests -->
+            <section class="bookshelf">
+                <div class="shelf-header">
+                    <span class="shelf-icon">&#x1F332;</span>
+                    <h2 class="shelf-title">Food Forests</h2>
+                </div>
+                <div class="book-grid">
+                    <article class="book-card">
+                        <h3 class="book-title">Forest Gardens Training Manual</h3>
+                        <p class="book-meta">2024 Master Edition</p>
+                        <a href="../../reference-library/food-forests/08_ForestGardens_TrainingManual_2024Master_0410_Digital9.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Food Forest Design</h3>
+                        <p class="book-meta">Layout & Planning</p>
+                        <a href="../../reference-library/food-forests/FoodForestDesign.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Forests in Permaculture</h3>
+                        <p class="book-meta">Integration Guide</p>
+                        <a href="../../reference-library/food-forests/Forests_in_Permaculture.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Agroforestry -->
+            <section class="bookshelf">
+                <div class="shelf-header">
+                    <span class="shelf-icon">&#x1F333;</span>
+                    <h2 class="shelf-title">Agroforestry</h2>
+                </div>
+                <div class="book-grid">
+                    <article class="book-card">
+                        <h3 class="book-title">Planning for Agroforestry</h3>
+                        <p class="book-meta">Implementation Guide</p>
+                        <a href="../../reference-library/agroforestry/Planning_for_Agroforestry.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Perennial Polyculture Farming</h3>
+                        <p class="book-meta">Systems Design</p>
+                        <a href="../../reference-library/agroforestry/PerennialPolycultureFarming.PDF" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Producing Forest-Based Food Products</h3>
+                        <p class="book-meta">Permaculture Systems</p>
+                        <a href="../../reference-library/agroforestry/Producing_ForestBased_Food_Products_in_Permaculture_Systems.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Historical -->
+            <section class="bookshelf">
+                <div class="shelf-header">
+                    <span class="shelf-icon">&#x1F4D6;</span>
+                    <h2 class="shelf-title">Historical Documents</h2>
+                </div>
+                <div class="book-grid">
+                    <article class="book-card">
+                        <h3 class="book-title">From Agriculture to Permaculture</h3>
+                        <p class="book-meta">Historical Evolution</p>
+                        <a href="../../reference-library/historical/From_Agriculture_to_Permaculture.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                    <article class="book-card">
+                        <h3 class="book-title">Promoting Potatoes in 18th Century Europe</h3>
+                        <p class="book-meta">Rebecca Earle</p>
+                        <a href="../../reference-library/historical/promoting_potatoes_in_18th_century_europe_rebecca_earle.pdf" class="book-download" download>&#x1F4E5; Download Scroll</a>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="../index.html" class="back-link">
+                &#x1F3E0; Return to The Portal
+            </a>
+        </div>
+
+        <p class="footer-text">
+            "Open-pollinated seeds, not patented hybrids." &#x1F954;
+        </p>
+    </main>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPUDNIK TERMINAL - Cosmic Potato Wisdom</title>
+    <meta name="description" content="Consult the cosmic potato consciousness. Ask questions about soil, amendments, life, and the universe.">
+
+    <link rel="stylesheet" href="../css/core.css">
+    <link rel="stylesheet" href="../css/animations.css">
+    <link rel="stylesheet" href="../css/terminal.css">
+</head>
+<body>
+    <div class="crt-container">
+        <div class="terminal-window">
+            <div class="terminal-header">
+                <span class="terminal-title">SPUDNIK TERMINAL v4.7.3</span>
+                <div class="terminal-controls">
+                    <button class="terminal-btn close" aria-label="Close"></button>
+                    <button class="terminal-btn minimize" aria-label="Minimize"></button>
+                    <button class="terminal-btn maximize" aria-label="Maximize"></button>
+                </div>
+            </div>
+
+            <div class="terminal-body" id="terminal-body">
+                <div class="terminal-output" id="terminal-output">
+                    <!-- Boot sequence will be inserted here -->
+                </div>
+
+                <div class="terminal-input-line">
+                    <span class="terminal-prompt">spudnik@garden:~$</span>
+                    <input
+                        type="text"
+                        class="terminal-input"
+                        id="terminal-input"
+                        placeholder="Type your question, spudling..."
+                        autocomplete="off"
+                        autofocus
+                    >
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Portal Link -->
+        <div style="text-align: center; margin-top: var(--space-lg);">
+            <a href="../index.html" class="btn btn-terminal">
+                &#x1F3E0; Return to The Portal
+            </a>
+        </div>
+    </div>
+
+    <script src="../js/terminal.js"></script>
+</body>
+</html>
