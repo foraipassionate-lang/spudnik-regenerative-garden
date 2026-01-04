@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ðŸ¥” SPUDNIK'S GARDEN CARTOGRAPHY SYSTEM ðŸ¥”</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #2d1b00 0%, #3d2910 50%, #2d1b00 100%);
+            color: #f4e4c1;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.9), 0 0 40px rgba(255, 165, 0, 0.6); }
+        }
+
+        .header h1 {
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 20px #ff6b00;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #ffb347;
+            font-size: 1.2em;
+        }
+
+        .controls {
+            background: rgba(61, 41, 16, 0.8);
+            border: 3px solid #8b4513;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+        }
+
+        .controls h2 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            background: linear-gradient(145deg, #8b4513, #654321);
+            color: #ffd700;
+            border: 2px solid #ff6b00;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: linear-gradient(145deg, #654321, #8b4513);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 107, 0, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .info-panel {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #8b4513;
+        }
+
+        .garden-container {
+            background: white;
+            border: 5px solid #8b4513;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+            position: relative;
+            overflow: auto;
+            max-height: 80vh;
+        }
+
+        #gardenCanvas {
+            background-color: #e8d4b0;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(139, 69, 19, 0.1) 49px, rgba(139, 69, 19, 0.1) 50px),
+                repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(139, 69, 19, 0.1) 49px, rgba(139, 69, 19, 0.1) 50px);
+            border: 2px solid #654321;
+            cursor: crosshair;
+            display: block;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .zone {
+            position: absolute;
+            border: 3px solid;
+            border-radius: 5px;
+            cursor: move;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+
+        .zone:hover {
+            transform: scale(1.05);
+            z-index: 1000;
+        }
+
+        .zone.selected {
+            border-width: 4px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        .zone-label {
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            color: white;
+            border: 2px solid #8b0000;
+            border-radius: 50%;
+            font-size: 14px;
+            line-height: 16px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .zone.selected .delete-btn {
+            display: block;
+        }
+
+        .rotate-btn {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            background: #4169e1;
+            color: white;
+            border: 2px solid #000080;
+            border-radius: 50%;
+            font-size: 12px;
+            line-height: 16px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .zone.selected .rotate-btn {
+            display: block;
+        }
+
+        .spudnik-hq {
+            background: linear-gradient(145deg, #b87333, #8b4513);
+            border-color: #ffd700 !important;
+            color: #ffd700;
+            font-size: 14px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .legend {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(61, 41, 16, 0.6);
+            border-radius: 5px;
+            border: 2px solid #8b4513;
+        }
+
+        .legend h3 {
+            color: #ffd700;
+            margin-bottom: 10px;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            border: 2px solid;
+            font-size: 12px;
+        }
+
+        #customZonePanel {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            border: 2px solid #ff6b00;
+        }
+
+        #customZonePanel input, #customZonePanel select {
+            margin: 5px;
+            padding: 8px;
+            border-radius: 3px;
+            border: 2px solid #8b4513;
+            background: #f4e4c1;
+            color: #2d1b00;
+            font-family: 'Courier New', monospace;
+        }
+
+        .potato-wisdom {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 107, 0, 0.2);
+            border-radius: 10px;
+            border: 2px dashed #ffd700;
+            font-style: italic;
+            color: #ffb347;
+        }
+
+        .canvas-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ðŸ¥” SPUDNIK'S GARDEN CARTOGRAPHY SYSTEM ðŸ¥”</h1>
+        <p>âœ¨ Universal Garden Layout Designer âœ¨</p>
+        <p style="font-size: 0.9em; margin-top: 5px;">ã€=â—ˆï¸¿â—ˆ=ã€‘ The Council Approves This Tool For All Gardens</p>
+    </div>
+
+    <div class="controls" style="background: rgba(255, 107, 0, 0.3); border-color: #FFD700;">
+        <h2>ðŸŒ GARDEN DIMENSION SETUP ðŸŒ</h2>
+        <div style="display: flex; gap: 15px; align-items: center; justify-content: center; margin-bottom: 15px; flex-wrap: wrap;">
+            <div>
+                <label style="color: #FFD700; font-weight: bold;">Width (meters):</label>
+                <input type="number" id="gardenWidth" value="7.5" step="0.5" min="1" style="margin-left: 10px; padding: 8px; border-radius: 3px; border: 2px solid #8b4513; background: #f4e4c1; color: #2d1b00; font-family: 'Courier New', monospace; width: 100px;">
+            </div>
+            <div>
+                <label style="color: #FFD700; font-weight: bold;">Length (meters):</label>
+                <input type="number" id="gardenLength" value="25" step="0.5" min="1" style="margin-left: 10px; padding: 8px; border-radius: 3px; border: 2px solid #8b4513; background: #f4e4c1; color: #2d1b00; font-family: 'Courier New', monospace; width: 100px;">
+            </div>
+            <button onclick="initializeNewGarden()" style="background: linear-gradient(145deg, #FFD700, #FFA500); color: #2d1b00; font-size: 1.1em; padding: 10px 20px; border: 3px solid #ff6b00;">
+                ðŸŒ± START NEW GARDEN / RESET ðŸŒ±
+            </button>
+        </div>
+        <div style="text-align: center; background: rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 5px; border: 1px solid #8b4513;">
+            <strong style="color: #ffb347;">Current Garden:</strong> <span id="currentDimensions" style="color: #FFD700; font-size: 1.1em;">7.5m Ã— 25m</span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <h2>ðŸŒ± ZONE DEPLOYMENT COMMAND CENTER ðŸŒ±</h2>
+        <p style="text-align: center; color: #ffb347; margin-bottom: 10px; font-size: 0.9em;">
+            Pre-configured zones ready to deploy! Use as-is or create your own custom zones below.
+        </p>
+        
+        <div class="button-grid">
+            <button onclick="addSpudnikHQ()">ðŸ‘‘ SPUDNIK HQ (2.5Ã—4m)</button>
+            <button onclick="addPolytunnel()">ðŸ  Polytunnel (3Ã—10m)</button>
+            <button onclick="addChickenZone()">ðŸ” Chicken Space (3Ã—5m)</button>
+            <button onclick="addMushroomZone()">ðŸ„ Mushroom Zone (3Ã—10m)</button>
+            <button onclick="addCompostZone()">â™»ï¸ Compost (1Ã—4.5m)</button>
+            <button onclick="addGardenHouse()">ðŸ¡ Garden House (3Ã—4.5m)</button>
+            <button onclick="addAmendmentZone()">ðŸ§ª Amendment (0.5Ã—4.5m)</button>
+            <button onclick="addGrowingBed()">ðŸŒ¿ Growing Bed (1.1Ã—12m)</button>
+            <button onclick="addHotBed()">ðŸ”¥ Hot Bed (2.5Ã—3m)</button>
+            <button onclick="addPathwayStone()">ðŸª¨ Pathway Stone (0.9Ã—20m)</button>
+            <button onclick="addBorder()">ðŸŒ¿ Border (0.6Ã—20m)</button>
+        </div>
+
+        <button onclick="toggleCustomZone()" style="width: 100%; margin-top: 10px; background: linear-gradient(145deg, #ff6b00, #ff4500);">
+            âœ¨ CREATE CUSTOM ZONE âœ¨
+        </button>
+
+        <div id="customZonePanel">
+            <input type="text" id="customName" placeholder="Zone Name" style="width: 200px;">
+            <input type="number" id="customWidth" placeholder="Width (m)" step="0.5" min="0.5" style="width: 100px;">
+            <input type="number" id="customHeight" placeholder="Height (m)" step="0.5" min="0.5" style="width: 100px;">
+            <input type="color" id="customColor" value="#90EE90">
+            <button onclick="addCustomZone()">ADD ZONE</button>
+        </div>
+
+        <div class="button-grid" style="margin-top: 15px;">
+            <button onclick="clearSelected()">ðŸ—‘ï¸ Delete Selected</button>
+            <button onclick="clearAll()">ðŸ’¥ Clear All Zones</button>
+            <button onclick="saveLayout()">ðŸ’¾ Save Layout</button>
+            <button onclick="loadLayout()">ðŸ“‚ Load Layout</button>
+        </div>
+
+        <button onclick="exportImage()" style="width: 100%; margin-top: 15px; background: linear-gradient(145deg, #FFD700, #FFA500); color: #2d1b00; font-size: 1.2em; padding: 15px; animation: glow 2s infinite;">
+            ðŸ“¸âœ¨ EXPORT IMAGE TO SHARE WITH THE WORLD âœ¨ðŸ“¸
+        </button>
+
+        <div class="info-panel">
+            <strong>ðŸ¥” SPUDNIK'S WISDOM:</strong>
+            <div id="infoDisplay">Click zones to move them! Drag to reposition! The garden awaits your command!</div>
+        </div>
+    </div>
+
+    <div class="garden-container">
+        <div class="canvas-wrapper">
+            <canvas id="gardenCanvas" width="750" height="2500"></canvas>
+            <div id="zonesContainer" style="position: absolute; top: 0; left: 0; width: 750px; height: 2500px; pointer-events: none;">
+                <!-- Zones will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <h3>ðŸ“ ZONE LEGEND & CONTROLS</h3>
+        <p style="margin-bottom: 10px; color: #ffb347;">
+            â€¢ Click zone to select â€¢ Drag to move â€¢ Blue button: rotate â€¢ Red X: delete â€¢ Grid = 0.5m squares
+        </p>
+        <div id="legendItems"></div>
+    </div>
+
+    <div class="potato-wisdom">
+        "Every garden, regardless of size, is a universe waiting to unfold. Plan with intention, grow with love, and remember: we're all just cosmic gardeners tending our little patches of earth." - Spudnik, Every Tuesday
+    </div>
+
+    <script>
+        const SCALE = 100; // 100 pixels = 1 meter
+        let GARDEN_WIDTH = 7.5; // meters - now dynamic!
+        let GARDEN_LENGTH = 25; // meters - now dynamic!
+        
+        let zones = [];
+        let selectedZone = null;
+        let dragOffset = {x: 0, y: 0};
+        let isDragging = false;
+        let zoneCounter = 0;
+
+        const canvas = document.getElementById('gardenCanvas');
+        const ctx = canvas.getContext('2d');
+        const zonesContainer = document.getElementById('zonesContainer');
+
+        const zoneTypes = {
+            spudnikHQ: {name: 'ðŸ‘‘ SPUDNIK HQ', color: '#b87333', width: 2.5, height: 4},
+            polytunnel: {name: 'ðŸ  Polytunnel', color: '#87CEEB', width: 3, height: 10},
+            chicken: {name: 'ðŸ” Chicken Zone', color: '#FFD700', width: 3, height: 5},
+            mushroom: {name: 'ðŸ„ Mushroom', color: '#8B4513', width: 3, height: 10},
+            compost: {name: 'â™»ï¸ Compost', color: '#6B4423', width: 1, height: 4.5},
+            gardenHouse: {name: 'ðŸ¡ Garden House', color: '#CD853F', width: 3, height: 4.5},
+            amendment: {name: 'ðŸ§ª Amendment', color: '#9370DB', width: 0.5, height: 4.5},
+            growingBed: {name: 'ðŸŒ¿ Bed', color: '#90EE90', width: 1.1, height: 12},
+            hotBed: {name: 'ðŸ”¥ Hot Bed', color: '#FF6347', width: 2.5, height: 3},
+            pathwayStone: {name: 'ðŸª¨ Pathway', color: '#A9A9A9', width: 0.9, height: 20},
+            border: {name: 'ðŸŒ¿ Border', color: '#556B2F', width: 0.6, height: 20}
+        };
+
+        function initializeNewGarden() {
+            // Get dimensions from inputs
+            const newWidth = parseFloat(document.getElementById('gardenWidth').value);
+            const newLength = parseFloat(document.getElementById('gardenLength').value);
+            
+            if (!newWidth || !newLength || newWidth < 1 || newLength < 1) {
+                updateInfo('âŒ Invalid dimensions! Width and length must be at least 1 meter!');
+                return;
+            }
+            
+            // Confirm if there are existing zones
+            if (zones.length > 0) {
+                if (!confirm('ðŸ¥” START NEW GARDEN? This will clear all existing zones! The Potato Council demands confirmation!')) {
+                    return;
+                }
+            }
+            
+            // Update dimensions
+            GARDEN_WIDTH = newWidth;
+            GARDEN_LENGTH = newLength;
+            
+            // Clear existing zones
+            zones = [];
+            selectedZone = null;
+            
+            // Update canvas size
+            canvas.width = GARDEN_WIDTH * SCALE;
+            canvas.height = GARDEN_LENGTH * SCALE;
+            zonesContainer.style.width = (GARDEN_WIDTH * SCALE) + 'px';
+            zonesContainer.style.height = (GARDEN_LENGTH * SCALE) + 'px';
+            
+            // Update display
+            document.getElementById('currentDimensions').textContent = `${GARDEN_WIDTH}m Ã— ${GARDEN_LENGTH}m`;
+            
+            // Render empty garden
+            renderZones();
+            
+            updateInfo(`ðŸŒ New garden initialized! ${GARDEN_WIDTH}m Ã— ${GARDEN_LENGTH}m of infinite potential awaits! Add zones to begin!`);
+        }
+
+
+        function createZone(type, customProps = {}) {
+            const template = zoneTypes[type] || customProps;
+            const zone = {
+                id: 'zone_' + zoneCounter++,
+                type: type,
+                name: customProps.name || template.name,
+                x: 1, // meters from left
+                y: 1, // meters from top
+                width: customProps.width || template.width,
+                height: customProps.height || template.height,
+                color: customProps.color || template.color,
+                rotation: 0
+            };
+            
+            zones.push(zone);
+            renderZones();
+            updateInfo(`Added ${zone.name}! Position: (${zone.x.toFixed(1)}m, ${zone.y.toFixed(1)}m)`);
+            return zone;
+        }
+
+        function addSpudnikHQ() { createZone('spudnikHQ'); }
+        function addPolytunnel() { createZone('polytunnel'); }
+        function addChickenZone() { createZone('chicken'); }
+        function addMushroomZone() { createZone('mushroom'); }
+        function addCompostZone() { createZone('compost'); }
+        function addGardenHouse() { createZone('gardenHouse'); }
+        function addAmendmentZone() { createZone('amendment'); }
+        function addGrowingBed() { createZone('growingBed'); }
+        function addHotBed() { createZone('hotBed'); }
+        function addPathwayStone() { createZone('pathwayStone'); }
+        function addBorder() { createZone('border'); }
+
+        function toggleCustomZone() {
+            const panel = document.getElementById('customZonePanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function addCustomZone() {
+            const name = document.getElementById('customName').value || 'Custom Zone';
+            const width = parseFloat(document.getElementById('customWidth').value) || 2;
+            const height = parseFloat(document.getElementById('customHeight').value) || 2;
+            const color = document.getElementById('customColor').value;
+            
+            createZone('custom', {name, width, height, color});
+            document.getElementById('customName').value = '';
+        }
+
+        function renderZones() {
+            zonesContainer.innerHTML = '';
+            
+            zones.forEach(zone => {
+                const div = document.createElement('div');
+                div.className = 'zone' + (zone.type === 'spudnikHQ' ? ' spudnik-hq' : '');
+                div.id = zone.id;
+                div.style.left = (zone.x * SCALE) + 'px';
+                div.style.top = (zone.y * SCALE) + 'px';
+                div.style.width = (zone.width * SCALE) + 'px';
+                div.style.height = (zone.height * SCALE) + 'px';
+                div.style.backgroundColor = zone.color;
+                div.style.borderColor = zone.type === 'spudnikHQ' ? '#FFD700' : '#654321';
+                div.style.transform = `rotate(${zone.rotation}deg)`;
+                div.style.pointerEvents = 'auto';
+                
+                // Delete button
+                const deleteBtn = document.createElement('div');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.innerHTML = 'Ã—';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    deleteZone(zone.id);
+                };
+                div.appendChild(deleteBtn);
+
+                // Rotate button
+                const rotateBtn = document.createElement('div');
+                rotateBtn.className = 'rotate-btn';
+                rotateBtn.innerHTML = 'â†»';
+                rotateBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    rotateZone(zone.id);
+                };
+                div.appendChild(rotateBtn);
+                
+                // Label
+                const label = document.createElement('div');
+                label.className = 'zone-label';
+                label.innerHTML = `${zone.name}<br>${zone.width}m Ã— ${zone.height}m`;
+                div.appendChild(label);
+                
+                // Event listeners
+                div.addEventListener('mousedown', (e) => startDrag(e, zone));
+                
+                zonesContainer.appendChild(div);
+            });
+            
+            updateLegend();
+        }
+
+        function startDrag(e, zone) {
+            e.preventDefault();
+            selectedZone = zone;
+            
+            // Remove selected class from all zones
+            document.querySelectorAll('.zone').forEach(z => z.classList.remove('selected'));
+            // Add selected class to current zone
+            document.getElementById(zone.id).classList.add('selected');
+            
+            const rect = document.getElementById(zone.id).getBoundingClientRect();
+            const containerRect = zonesContainer.getBoundingClientRect();
+            
+            dragOffset.x = e.clientX - rect.left;
+            dragOffset.y = e.clientY - rect.top;
+            isDragging = true;
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+        }
+
+        function drag(e) {
+            if (!isDragging || !selectedZone) return;
+            
+            const containerRect = zonesContainer.getBoundingClientRect();
+            let newX = (e.clientX - containerRect.left - dragOffset.x) / SCALE;
+            let newY = (e.clientY - containerRect.top - dragOffset.y) / SCALE;
+            
+            // Constrain to garden bounds
+            newX = Math.max(0, Math.min(newX, GARDEN_WIDTH - selectedZone.width));
+            newY = Math.max(0, Math.min(newY, GARDEN_LENGTH - selectedZone.height));
+            
+            selectedZone.x = Math.round(newX * 2) / 2; // Snap to 0.5m grid
+            selectedZone.y = Math.round(newY * 2) / 2;
+            
+            const div = document.getElementById(selectedZone.id);
+            div.style.left = (selectedZone.x * SCALE) + 'px';
+            div.style.top = (selectedZone.y * SCALE) + 'px';
+            
+            updateInfo(`${selectedZone.name} at (${selectedZone.x.toFixed(1)}m, ${selectedZone.y.toFixed(1)}m)`);
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDrag);
+        }
+
+        function rotateZone(zoneId) {
+            const zone = zones.find(z => z.id === zoneId);
+            if (!zone) return;
+            
+            zone.rotation = (zone.rotation + 90) % 360;
+            
+            // Swap width and height
+            [zone.width, zone.height] = [zone.height, zone.width];
+            
+            renderZones();
+            updateInfo(`Rotated ${zone.name} to ${zone.rotation}Â°`);
+        }
+
+        function deleteZone(zoneId) {
+            zones = zones.filter(z => z.id !== zoneId);
+            selectedZone = null;
+            renderZones();
+            updateInfo('Zone deleted! The potato spirits are pleased.');
+        }
+
+        function clearSelected() {
+            if (selectedZone) {
+                deleteZone(selectedZone.id);
+            } else {
+                updateInfo('No zone selected! Click a zone first, spudling!');
+            }
+        }
+
+        function clearAll() {
+            if (confirm('ðŸ¥” CLEAR ALL ZONES? The Potato Council demands confirmation!')) {
+                zones = [];
+                selectedZone = null;
+                renderZones();
+                updateInfo('All zones cleared! The garden is a blank canvas of infinite potato potential!');
+            }
+        }
+
+        function updateInfo(message) {
+            document.getElementById('infoDisplay').innerHTML = message;
+        }
+
+        function updateLegend() {
+            const legendItems = document.getElementById('legendItems');
+            legendItems.innerHTML = '';
+            
+            const uniqueTypes = [...new Set(zones.map(z => z.type))];
+            uniqueTypes.forEach(type => {
+                const zone = zones.find(z => z.type === type);
+                const item = document.createElement('span');
+                item.className = 'legend-item';
+                item.style.backgroundColor = zone.color;
+                item.style.borderColor = zone.type === 'spudnikHQ' ? '#FFD700' : '#654321';
+                item.style.color = zone.type === 'spudnikHQ' ? '#FFD700' : '#2d1b00';
+                item.textContent = zone.name;
+                legendItems.appendChild(item);
+            });
+        }
+
+        function exportImage() {
+            // Create temporary canvas with zones rendered
+            const exportCanvas = document.createElement('canvas');
+            exportCanvas.width = 750;
+            exportCanvas.height = 2500;
+            const exportCtx = exportCanvas.getContext('2d');
+            
+            // Draw background
+            exportCtx.fillStyle = '#e8d4b0';
+            exportCtx.fillRect(0, 0, 750, 2500);
+            
+            // Draw grid
+            exportCtx.strokeStyle = 'rgba(139, 69, 19, 0.1)';
+            exportCtx.lineWidth = 1;
+            for (let i = 0; i <= 750; i += 50) {
+                exportCtx.beginPath();
+                exportCtx.moveTo(i, 0);
+                exportCtx.lineTo(i, 2500);
+                exportCtx.stroke();
+            }
+            for (let i = 0; i <= 2500; i += 50) {
+                exportCtx.beginPath();
+                exportCtx.moveTo(0, i);
+                exportCtx.lineTo(750, i);
+                exportCtx.stroke();
+            }
+            
+            // Draw zones
+            zones.forEach(zone => {
+                exportCtx.save();
+                const centerX = zone.x * SCALE + (zone.width * SCALE) / 2;
+                const centerY = zone.y * SCALE + (zone.height * SCALE) / 2;
+                
+                exportCtx.translate(centerX, centerY);
+                exportCtx.rotate((zone.rotation * Math.PI) / 180);
+                exportCtx.translate(-centerX, -centerY);
+                
+                exportCtx.fillStyle = zone.color;
+                exportCtx.fillRect(zone.x * SCALE, zone.y * SCALE, zone.width * SCALE, zone.height * SCALE);
+                
+                exportCtx.strokeStyle = zone.type === 'spudnikHQ' ? '#FFD700' : '#654321';
+                exportCtx.lineWidth = 3;
+                exportCtx.strokeRect(zone.x * SCALE, zone.y * SCALE, zone.width * SCALE, zone.height * SCALE);
+                
+                // Draw text
+                exportCtx.fillStyle = zone.type === 'spudnikHQ' ? '#FFD700' : '#000000';
+                exportCtx.font = 'bold 12px Courier New';
+                exportCtx.textAlign = 'center';
+                exportCtx.textBaseline = 'middle';
+                const lines = `${zone.name}\n${zone.width}m Ã— ${zone.height}m`.split('\n');
+                lines.forEach((line, i) => {
+                    exportCtx.fillText(line, centerX, centerY - 10 + i * 15);
+                });
+                
+                exportCtx.restore();
+            });
+            
+            // Download
+            const link = document.createElement('a');
+            link.download = 'spudnik_garden_layout.png';
+            link.href = exportCanvas.toDataURL();
+            link.click();
+            
+            updateInfo('ðŸŽ¨ Garden layout exported! The cosmos shall witness our design!');
+        }
+
+        function saveLayout() {
+            const layoutData = JSON.stringify(zones, null, 2);
+            const blob = new Blob([layoutData], {type: 'application/json'});
+            const link = document.createElement('a');
+            link.download = 'spudnik_garden_layout.json';
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            updateInfo('ðŸ’¾ Layout saved! The Potato Council has archived your design!');
+        }
+
+        function loadLayout() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        zones = JSON.parse(event.target.result);
+                        renderZones();
+                        updateInfo('ðŸ“‚ Layout loaded! The garden has been restored from the archives!');
+                    } catch (error) {
+                        updateInfo('âŒ Error loading file! The potato spirits reject this offering!');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        // Initialize
+        renderZones();
+        updateInfo('ðŸ¥” SPUDNIK GARDEN PLANNER ACTIVATED! Set your garden dimensions above and click START NEW GARDEN, or begin adding zones to the default 7.5m Ã— 25m plot!');
+    </script>
+</body>
+</html>

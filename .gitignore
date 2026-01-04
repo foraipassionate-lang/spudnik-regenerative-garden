@@ -1,0 +1,34 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Node modules (if any tools use npm)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# Large files that shouldn't be committed
+# (reference PDFs are intentionally included)
+
+# Personal notes that shouldn't be shared
+notes-personal/
+drafts/
+
+# Soil test originals (keep anonymized versions only)
+garden-data/soil-tests/originals/
